@@ -39,16 +39,17 @@ RUN  apt-get update \
 
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' && \
     apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 && \
-    apt-get update && apt-get install ros-kinetic-desktop && \
+    apt-get update && apt-get install -y ros-kinetic-desktop && \
     apt-get install -y python-rosinstall && \
-    rosdep init
+    rosdep init && \
+    rosdep update
 
 # Install Gazebo
     
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
     wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add - && \
     apt-get update && \
-    apt-get install -y gazebo7
+    apt-get install -y gazebo7 && \
     apt-get install -y ros-kinetic-gazebo-ros-pkgs ros-kinetic-gazebo-ros-control
 
 # Setup ROS
@@ -60,12 +61,8 @@ RUN /bin/bash -c "source ~/.bashrc"
 
 # =================================
 
-# user tools
-RUN apt-get update && apt-get install -y \
-    terminator \
-    gedit \
-    okular \
-    && rm -rf /var/lib/apt/lists/*
+
+
 
 # tini for subreap
 ENV TINI_VERSION v0.9.0
